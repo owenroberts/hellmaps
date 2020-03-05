@@ -1,6 +1,6 @@
-let c = 20; // columns
-let r = 20; // rows
-let m = 10; // min room dimension
+let c = 50; // columns
+let r = 50; // rows
+let m = 16; // min room dimension
 let d = {}; // room dimension multiplier
 
 let walls = [];
@@ -17,7 +17,9 @@ function setup() {
 }
 
 function createMap() {
-	const nodes = [new Node(0, 0, 50, 50)]; // root node
+	background(220);
+	const nodes = [new Node(0, 0, c, r)]; // root node
+	walls = [];
 
 	let didSplit = true;
 	while (didSplit) {
@@ -36,8 +38,7 @@ function createMap() {
 	}
 
 	nodes[0].createRooms();
-	// console.log(nodes);
-	nodes[0].display();
+	// nodes[0].display();
 
 	// setup walls
 	for (let x = 0; x < c; x++) {
@@ -48,11 +49,10 @@ function createMap() {
 					if (nodes[i].room.isInside(x, y)) inRoom = true;
 				}
 				if (nodes[i].paths.length) {
-					for (let i = 0; i < nodes[i].paths.length; i++) {
-						if (nodes[i].paths[i].isInside(x, y)) inRoom = true;
+					for (let j = 0; j < nodes[i].paths.length; j++) {
+						if (nodes[i].paths[j].isInside(x, y)) inRoom = true;
 					}
 				}
-
 			}
 			if (!inRoom) walls.push(new Wall(x, y)); 
 		}

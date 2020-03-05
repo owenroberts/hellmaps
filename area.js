@@ -1,15 +1,14 @@
 class Area {
 	
 	constructor(x, y, w, h, c) {
-		this.x = floor(x);
-		this.y = floor(y);
-		this.w = floor(w);
-		this.h = floor(h);
+		this.x = round(x);
+		this.y = round(y);
+		this.w = max(round(w), 1);
+		this.h = max(round(h), 1);
 		this.c = c;
 	}
 
 	isInside(x, y) {
-		if (this.c == 'gold') console.log(x, y, this);
 		if (x >= this.x && x < this.x + this.w && y >= this.y && y < this.y + this.h) return true;
 		else return false;
 	}
