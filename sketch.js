@@ -16,5 +16,6 @@ function draw() {
 }
 
 function mousePressed() {
+	console.clear();
 	tree = new Node(0, 0, width, height);
 }

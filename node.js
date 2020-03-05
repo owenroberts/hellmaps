@@ -3,8 +3,8 @@ class Node extends Area {
 	constructor(x, y, w, h) {
 		super(x, y, w, h, floor(random(255)));
 
-		this.vert = random(1) > this.w / (this.w + this.h);
-		if (this.vert) {
+		this.verticalSplit = random(1) > this.w / (this.w + this.h);
+		if (this.verticalSplit) {
 			// split vertical
 			if (this.h > m) {
 				const h = floor(this.h * random(0.25, 0.75));
@@ -21,52 +21,14 @@ class Node extends Area {
 		}
 
 		if (!this.a) this.addRoom();
-		if (this.a && !this.a.a && !this.b.a) this.addPath();
-	}
+		if (this.a && !this.a.a && !this.b.a) 
+			this.path = new Path(this.a.room, this.b.room, this.verticalSplit);
 
-	addPath() {
-		let x, y, w, h;
-		if (this.vert) {
-			w = 20;
-			x = this.a.room.x + random(this.a.room.w - w);
-			y = this.a.room.y + this.a.room.h;
-			h = this.b.room.y - (this.a.room.y + this.a.room.h);
-
-			if (this.a.room.x + this.a.room.w < this.b.room.x + w ||
-				this.b.room.x + this.b.room.w < this.a.room.x + w
-				) {
-				// rooms don't overlap at all ....
-				console.log('no overlap');
-
-				let _h = 20;
-				let _w = abs(x - (this.b.room.x + this.b.room.w));
-				let _x = 
-
-			} else {
-				while (x < this.b.room.x + w) { x++; }
-				while (x > this.b.room.x + this.b.room.w - w) { x--; }
+		if (this.a) {
+			if (this.a.room && !this.path) {
+				console.log('no paths!')
 			}
-			
-		} else {
-			h = 20;
-			x = this.a.room.x + this.a.room.w;
-			y = this.a.room.y + random(this.a.room.h - h);
-			w = this.b.room.x - (this.a.room.x + this.a.room.w);
-			
-
-			if (this.a.room.y + this.a.room.h < this.b.room.y + h ||
-				this.b.room.y + this.b.room.y < this.a.room.y + h
-				) {
-				// rooms don't overlap at all ....
-				console.log('no overlap');
-			} else {
-				while (y < this.b.room.y + h) { y++; }
-				while (y > this.b.room.y + this.b.room.h - h) { y--; }
-			}
-
 		}
-
-		this.path = new Path(x, y, w, h);
 	}
 
 	addRoom() {
