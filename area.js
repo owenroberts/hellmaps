@@ -1,10 +1,10 @@
 class Area {
 	
 	constructor(x, y, w, h, c) {
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
+		this.x = floor(x);
+		this.y = floor(y);
+		this.w = floor(w);
+		this.h = floor(h);
 		this.c = c;
 	}
 
