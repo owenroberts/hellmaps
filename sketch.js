@@ -1,4 +1,3 @@
-let tree;
 let m; // min room dimension
 
 function setup() {
@@ -7,14 +6,35 @@ function setup() {
 	noStroke();
 
 	m = width * 0.75; // 0.33;
-	tree = new Tree();
+	createMap();
+
 }
 
-function draw() {
-	background('plum');
-	tree.display();
+function createMap() {
+	const nodes = [new Node(0, 0, width, height)]; // root node
+
+	let didSplit = true;
+	while (didSplit) {
+		didSplit = false;
+		nodes.forEach(node => {
+			if (!node.a && !node.b) {
+				if (node.w > m && node.h > m) {
+					if (node.split()) {
+						nodes.push(node.a);
+						nodes.push(node.b);
+						didSplit = true;
+					}
+				}
+			}
+		});
+	}
+
+	nodes[0].createRooms();
+	// console.log(nodes);
+	nodes[0].display();
 }
 
 function mousePressed() {
-	tree = new Tree();
+	console.clear();
+	createMap();
 }
