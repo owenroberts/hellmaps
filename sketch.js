@@ -1,17 +1,23 @@
-let m; // min room dimension
+let c = 20; // columns
+let r = 20; // rows
+let m = 10; // min room dimension
+let d = {}; // room dimension multiplier
+
+let walls = [];
+
 
 function setup() {
 	const sz = windowWidth < windowHeight ? windowWidth : windowHeight;
 	createCanvas(sz, sz);
 	noStroke();
 
-	m = width * 0.75; // 0.33;
+	d.x = width/c;
+	d.y = height/r;
 	createMap();
-
 }
 
 function createMap() {
-	const nodes = [new Node(0, 0, width, height)]; // root node
+	const nodes = [new Node(0, 0, 50, 50)]; // root node
 
 	let didSplit = true;
 	while (didSplit) {
@@ -32,6 +38,29 @@ function createMap() {
 	nodes[0].createRooms();
 	// console.log(nodes);
 	nodes[0].display();
+
+	// setup walls
+	for (let x = 0; x < c; x++) {
+		for (let y = 0; y < r; y++) {
+			let inRoom = false;
+			for (let i = 0; i < nodes.length; i++) {
+				if (nodes[i].room) {
+					if (nodes[i].room.isInside(x, y)) inRoom = true;
+				}
+				if (nodes[i].paths.length) {
+					for (let i = 0; i < nodes[i].paths.length; i++) {
+						if (nodes[i].paths[i].isInside(x, y)) inRoom = true;
+					}
+				}
+
+			}
+			if (!inRoom) walls.push(new Wall(x, y)); 
+		}
+	}
+
+	for (let i = 0; i < walls.length; i++) {
+		walls[i].display();
+	}
 }
 
 function mousePressed() {

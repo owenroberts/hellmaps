@@ -52,14 +52,9 @@ class Node extends Area {
 	}
 
 	createPath(a, b) {
-		console.log(a, b);
-		let sz = m * 0.075;
-		let sz2 = sz * 2;
-		
-		let v1 = createVector(random(a.x + sz, a.x + a.w - sz2), random(a.y + sz, a.y + a.h - sz2));
-		let v2 = createVector(random(b.x + sz, b.x + b.w - sz2), random(b.y + sz, b.y + b.h - sz2));
 
-		console.log(v1, v2);
+		let v1 = createVector(random(a.x + 1, a.x + a.w - 2), random(a.y + 1, a.y + a.h - 2));
+		let v2 = createVector(random(b.x + 1, b.x + b.w - 2), random(b.y + 1, b.y + b.h - 2));
 		
 		let w = v2.x - v1.x;
 		let h = v2.y - v1.y;
@@ -67,59 +62,58 @@ class Node extends Area {
 		if (w < 0) {
 			if (h < 0) {
 				if (random(1) > 0.5) {
-					this.paths.push(new Area(v2.x, v1.y, abs(w), sz, 'gold'));
-					this.paths.push(new Area(v2.x, v2.y, sz, abs(h), 'gold'));
+					this.paths.push(new Area(v2.x, v1.y, abs(w), 1, 'gold'));
+					this.paths.push(new Area(v2.x, v2.y, 1, abs(h), 'gold'));
 				} else {
-					this.paths.push(new Area(v2.x, v2.y, abs(w), sz, 'gold'));
-					this.paths.push(new Area(v1.x, v2.y, sz, abs(h), 'gold'));
+					this.paths.push(new Area(v2.x, v2.y, abs(w), 1, 'gold'));
+					this.paths.push(new Area(v1.x, v2.y, 1, abs(h), 'gold'));
 				}
 			} else if (h > 0) {
 				if (random(1) > 0.5) {
-					this.paths.push(new Area(v2.x, v1.y, abs(w), sz, 'gold'));
-					this.paths.push(new Area(v2.x, v1.y, sz, abs(h), 'gold'));
+					this.paths.push(new Area(v2.x, v1.y, abs(w), 1, 'gold'));
+					this.paths.push(new Area(v2.x, v1.y, 1, abs(h), 'gold'));
 				} else {
-					this.paths.push(new Area(v2.x, v2.y, abs(w), sz, 'gold'));
-					this.paths.push(new Area(v1.x, v1.y, sz, abs(h), 'gold'));
+					this.paths.push(new Area(v2.x, v2.y, abs(w), 1, 'gold'));
+					this.paths.push(new Area(v1.x, v1.y, 1, abs(h), 'gold'));
 				}
 			} else {
-				this.paths.push(new Area(v2.x, v2.y, abs(w), sz, 'gold'));
+				this.paths.push(new Area(v2.x, v2.y, abs(w), 1, 'gold'));
 			}
 		} else if (w > 0) {
 			if (h < 0) {
 				if (random(1) > 0.5) {
-					this.paths.push(new Area(v1.x, v2.y, abs(w), sz, 'gold'));
-					this.paths.push(new Area(v1.x, v2.y, sz, abs(h), 'gold'));
+					this.paths.push(new Area(v1.x, v2.y, abs(w), 1, 'gold'));
+					this.paths.push(new Area(v1.x, v2.y, 1, abs(h), 'gold'));
 				} else {
-					this.paths.push(new Area(v1.x, v1.y, abs(w), sz, 'gold'));
-					this.paths.push(new Area(v2.x, v2.y, sz, abs(h), 'gold'));
+					this.paths.push(new Area(v1.x, v1.y, abs(w), 1, 'gold'));
+					this.paths.push(new Area(v2.x, v2.y, 1, abs(h), 'gold'));
 				}
 			} else if (h > 0) {
 				if (random(1) > 0.5) {
-					this.paths.push(new Area(v1.x, v1.y, abs(w), sz, 'gold'));
-					this.paths.push(new Area(v2.x, v1.y, sz, abs(h), 'gold'));
+					this.paths.push(new Area(v1.x, v1.y, abs(w), 1, 'gold'));
+					this.paths.push(new Area(v2.x, v1.y, 1, abs(h), 'gold'));
 				} else {
-					this.paths.push(new Area(v1.x, v2.y, abs(w), sz, 'gold'));
-					this.paths.push(new Area(v1.x, v1.y, sz, abs(h), 'gold'));
+					this.paths.push(new Area(v1.x, v2.y, abs(w), 1, 'gold'));
+					this.paths.push(new Area(v1.x, v1.y, 1, abs(h), 'gold'));
 				}
 			} else {
-				this.paths.push(new Area(v1.x, v1.y, abs(w), sz, 'gold'));
+				this.paths.push(new Area(v1.x, v1.y, abs(w), 1, 'gold'));
 			}
 		} else {
 			if (h < 0) {
-				this.paths.push(new Area(v2.x, v2.y, sz, abs(h), 'gold'));
+				this.paths.push(new Area(v2.x, v2.y, 1, abs(h), 'gold'));
 			} else {
-				this.paths.push(new Area(v1.x, v1.y, sz, abs(h), 'gold'));
+				this.paths.push(new Area(v1.x, v1.y, 1, abs(h), 'gold'));
 			}
 		}
-
 	}
 
 	display() {
-		super.display();
+		// super.display();
 		if (this.room) this.room.display();
 		if (this.a) this.a.display();
 		if (this.b) this.b.display();
-		for (let i = 0; i < this.paths.length; i++) {
+		for (let i = 0; i < this.paths.length; i++) {	
 			this.paths[i].display();
 		}
 	}

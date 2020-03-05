@@ -8,12 +8,14 @@ class Area {
 		this.c = c;
 	}
 
-	collide(other) {
-
+	isInside(x, y) {
+		if (this.c == 'gold') console.log(x, y, this);
+		if (x >= this.x && x < this.x + this.w && y >= this.y && y < this.y + this.h) return true;
+		else return false;
 	}
 
 	display() {
 		fill(this.c);
-		rect(this.x, this.y, this.w, this.h);
+		rect(this.x * d.x, this.y * d.y, this.w * d.x, this.h * d.y);
 	}
 }
