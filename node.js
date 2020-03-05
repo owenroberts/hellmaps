@@ -3,6 +3,8 @@ class Node extends Area {
 	constructor(x, y, w, h) {
 		super(x, y, w, h, floor(random(255)));
 
+		this.parent = parent;
+
 		this.vert = random(1) > this.w / (this.w + this.h);
 		if (this.vert) {
 			// split vertical

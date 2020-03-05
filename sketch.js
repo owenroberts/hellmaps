@@ -7,7 +7,7 @@ function setup() {
 	noStroke();
 
 	m = width * 0.75; // 0.33;
-	tree = new Node(0, 0, width, height);
+	tree = new Tree();
 }
 
 function draw() {
@@ -16,5 +16,5 @@ function draw() {
 }
 
 function mousePressed() {
-	tree = new Node(0, 0, width, height);
+	tree = new Tree();
 }
