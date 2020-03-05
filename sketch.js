@@ -5,9 +5,9 @@ function setup() {
 	createCanvas(windowWidth, windowWidth);
 	noStroke();
 
-	m = width * 0.33;
+	m = width * 0.75; // 0.33;
 
-	tree = new Room(0, 0, width, height);
+	tree = new Node(0, 0, width, height);
 }
 
 function draw() {
