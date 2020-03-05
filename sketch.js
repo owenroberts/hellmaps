@@ -7,15 +7,16 @@ function setup() {
 	noStroke();
 
 	m = width * 0.75; // 0.33;
-	tree = new Node(0, 0, width, height);
+	newTree();
 }
 
-function draw() {
+function newTree() {
 	background('plum');
+	tree = new Node(0, 0, width, height);
 	tree.display();
 }
 
 function mousePressed() {
 	console.clear();
-	tree = new Node(0, 0, width, height);
+	newTree();
 }

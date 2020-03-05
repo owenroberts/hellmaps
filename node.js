@@ -20,24 +20,55 @@ class Node extends Area {
 			}
 		}
 
-		if (!this.a) this.addRoom();
-		if (this.a && !this.a.a && !this.b.a) 
-			this.path = new Path(this.a.room, this.b.room, this.verticalSplit);
+		// node with no children gets a room
+		if (!this.a) this.room = new Room(x, y, w, h);
 
+		// connect child nodes that have no children
+		this.paths = [];
+		if (this.a && !this.a.a && !this.b.a) 
+			this.paths.push(new Path(this.a.room, this.b.room, this.verticalSplit));
+
+
+		// connect random child nodes
+		if (this.a && this.b) {
+			if (this.a.a && this.b.a && this.a.b && this.b.b) {
+				const n1 = random(1) > 0.5 ? this.a.a : this.a.b;
+				const n2 = random(1) > 0.5 ? this.b.a : this.b.b;
+
+				console.log('vert', n1.x == n2.x);
+				console.log('random');
+				console.log(n1);
+				console.log(n2);
+
+				const verticalSplit = n1.x == n2.x;
+				let a, b;
+				if (verticalSplit) [a, b] = n1.y < n2.y ? [n1, n2] : [n2, n1];
+				else [a, b] = n1.x < n2.x ? [n1, n2] : [n2, n1];
+
+				this.paths.push(new Path(n1.room, n2.room, verticalSplit));
+			}
+		}
+
+		// child with room but no children
 		if (this.a) {
-			if (this.a.room && !this.path) {
-				console.log('no paths!')
+			if (!this.paths.length && (this.a.room || this.b.room)) {
+				const n1 = this.a.room ? this.a : this.b;
+				const children = this.a.room ? this.b : this.a;
+				const n2 = random(1) > 0.5 ? children.a : children.b;
+				
+				console.log('vert', n1.x == n2.x);
+				console.log(n1);
+				console.log(n2);
+
+				const verticalSplit = n1.x == n2.x;
+				let a, b;
+				if (verticalSplit) [a, b] = n1.y < n2.y ? [n1, n2] : [n2, n1];
+				else [a, b] = n1.x < n2.x ? [n1, n2] : [n2, n1];
+				this.paths.push(new Path(a.room, b.room, verticalSplit));
 			}
 		}
 	}
 
-	addRoom() {
-		let w = this.w * random(0.25, 0.9);
-		let h = this.h * random(0.25, 0.9);
-		let x = random(0, this.w - w);
-		let y = random(0, this.h - h);
-		this.room = new Room(this.x + x, this.y + y, w, h);
-	}
 
 	display() {
 		if (this.room) {
@@ -47,7 +78,11 @@ class Node extends Area {
 		} else {
 			this.a.display();
 			this.b.display();
-			if (this.path) this.path.display();
+			if (this.paths.length) {
+				for (let i = 0; i < this.paths.length; i++) {
+					this.paths[i].display();	
+				}
+			}
 		}
 	}
 }
