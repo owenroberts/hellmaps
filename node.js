@@ -53,8 +53,14 @@ class Node extends Area {
 
 	createPath(a, b) {
 
-		let v1 = createVector(random(a.x + 1, a.x + a.w - 2), random(a.y + 1, a.y + a.h - 2));
-		let v2 = createVector(random(b.x + 1, b.x + b.w - 2), random(b.y + 1, b.y + b.h - 2));
+		let v1 = createVector(
+			round(random(a.x + 1, a.x + a.w - 2)), 
+			round(random(a.y + 1, a.y + a.h - 2))
+		);
+		let v2 = createVector(
+			round(random(b.x + 1, b.x + b.w - 2)),
+			round(random(b.y + 1, b.y + b.h - 2))
+		);
 		
 		let w = v2.x - v1.x;
 		let h = v2.y - v1.y;
