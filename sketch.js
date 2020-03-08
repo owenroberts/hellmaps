@@ -1,7 +1,7 @@
-let c = 50; // columns
-let r = 50; // rows
-let m = 16; // min room dimension
-let d = {}; // room dimension multiplier
+let cols = 50; // columns
+let rows = 50; // rows
+let min = 12; // min room dimension
+let cell = {}; // room dimension multiplier
 
 let walls = [];
 
@@ -10,14 +10,14 @@ function setup() {
 	createCanvas(sz, sz);
 	noStroke();
 
-	d.x = width/c;
-	d.y = height/r;
+	cell.w = width / cols;
+	cell.h = height / rows;
 	createMap();
 }
 
 function createMap() {
 	background(220);
-	const nodes = [new Node(0, 0, c, r)]; // root node
+	const nodes = [new Node(0, 0, cols, rows)]; // root node
 	walls = [];
 
 	let didSplit = true;
@@ -25,7 +25,7 @@ function createMap() {
 		didSplit = false;
 		nodes.forEach(node => {
 			if (!node.a && !node.b) {
-				if (node.w > m && node.h > m) {
+				if (node.w > min && node.h > min) {
 					if (node.split()) {
 						nodes.push(node.a);
 						nodes.push(node.b);
@@ -37,11 +37,15 @@ function createMap() {
 	}
 
 	nodes[0].createRooms();
-	// nodes[0].display();
+	// console.time();
+	// nodes[0].createWalls();
+	// console.timeEnd();
+	nodes[0].display();
 
-	// setup walls
-	for (let x = 0; x < c; x++) {
-		for (let y = 0; y < r; y++) {
+	setup walls
+	console.time();
+	for (let x = 0; x < cols; x++) {
+		for (let y = 0; y < rows; y++) {
 			let inRoom = false;
 			for (let i = 0; i < nodes.length; i++) {
 				if (nodes[i].room) {
@@ -56,6 +60,7 @@ function createMap() {
 			if (!inRoom) walls.push(new Wall(x, y)); 
 		}
 	}
+	console.timeEnd();
 
 	for (let i = 0; i < walls.length; i++) {
 		walls[i].display();

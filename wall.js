@@ -5,6 +5,6 @@ class Wall extends Area {
 
 	display() {
 		fill(this.c);
-		ellipse((this.x + this.w/2) * d.x, (this.y + this.h/2) * d.y, this.w * d.x, this.h * d.y);
+		ellipse((this.x + this.w/2) * cell.w, (this.y + this.h/2) * cell.h, this.w * cell.w, this.h * cell.h);
 	}
 }

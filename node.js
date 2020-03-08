@@ -1,22 +1,23 @@
 class Node extends Area {
 
 	constructor(x, y, w, h) {
-		super(x, y, w, h, floor(random(255)));
+		super(x, y, w, h, Math.floor(random(255)));
 		this.paths = [];
+		this.walls = [];
 	}
 
-	split() {
+	split(m) {
 		if (this.a || this.b) return false;
 
-		const verticalSplit = random(1) > this.w / (this.w + this.h);
+		const verticalSplit = Math.random() > this.w / (this.w + this.h);
 		if (m > (verticalSplit ? this.h : this.w)) return false;
 
 		if (verticalSplit) {
-			const h = floor(this.h * random(0.25, 0.75));
+			const h = Math.floor(this.h * random(0.25, 0.75));
 			this.a = new Node(this.x, this.y, this.w, h);
 			this.b = new Node(this.x, this.y + h, this.w, this.h - h);
 		} else {
-			const w = floor(this.w * random(0.25, 0.75));
+			const w = Math.floor(this.w * random(0.25, 0.75));
 			this.a = new Node(this.x, this.y, w, this.h);
 			this.b = new Node(this.x + w, this.y, this.w - w, this.h);
 		}
@@ -33,7 +34,46 @@ class Node extends Area {
 			let h = this.h * random(0.25, 0.9);
 			let x = random(0, this.w - w);
 			let y = random(0, this.h - h);
-			this.room = new Area(x + this.x, y + this.y, w, h, 'plum');			
+			this.room = new Room(x + this.x, y + this.y, w, h, 'plum');
+		}
+	}
+
+	createWalls() {
+		/* how to account for nested paths? */
+		if (this.paths.length) {
+			
+			let rooms = [];
+			if (this.a) rooms = rooms.concat(this.a.getRooms());
+			if (this.b) rooms = rooms.concat(this.b.getRooms());
+
+			for (let x = this.x; x < this.x + this.w; x++) {
+				for (let y = this.y; y < this.y + this.h; y++) {
+					let inRoom = false;
+					for (let i = 0; i < rooms.length; i++) {
+						if (rooms[i].isInside(x,y)) inRoom = true;
+					}
+					for (let i = 0; i < this.paths.length; i++) {
+						if (this.paths[i].isInside(x,y)) inRoom = true;
+					}
+					if (!inRoom) this.walls.push(new Wall(x, y)); 
+				}
+			}
+		} else {
+			if (this.a) this.a.createWalls();
+			if (this.b) this.b.createWalls();
+		}
+	}
+
+	getRooms() {
+		if (this.room) return [this.room];
+		else {
+			let a, b;
+			if (this.a) a = this.a.getRooms();
+			if (this.b) b = this.b.getRooms();
+			if (!a && !b) return null;
+			else if (!a) return [a];
+			else if (!b) return [b];
+			else return a.concat(b);
 		}
 	}
 
@@ -53,14 +93,14 @@ class Node extends Area {
 
 	createPath(a, b) {
 
-		let v1 = createVector(
-			round(random(a.x + 1, a.x + a.w - 2)), 
-			round(random(a.y + 1, a.y + a.h - 2))
-		);
-		let v2 = createVector(
-			round(random(b.x + 1, b.x + b.w - 2)),
-			round(random(b.y + 1, b.y + b.h - 2))
-		);
+		let v1 = {
+			x: Math.round(random(a.x + 1, a.x + a.w - 2)), 
+			y: Math.round(random(a.y + 1, a.y + a.h - 2))
+		};
+		let v2 = {
+			x: Math.round(random(b.x + 1, b.x + b.w - 2)),
+			y: Math.round(random(b.y + 1, b.y + b.h - 2))
+		};
 		
 		let w = v2.x - v1.x;
 		let h = v2.y - v1.y;
@@ -68,48 +108,48 @@ class Node extends Area {
 		if (w < 0) {
 			if (h < 0) {
 				if (random(1) > 0.5) {
-					this.paths.push(new Area(v2.x, v1.y, abs(w), 1, 'gold'));
-					this.paths.push(new Area(v2.x, v2.y, 1, abs(h), 'gold'));
+					this.paths.push(new Path(v2.x, v1.y, Math.abs(w), 1, 'gold'));
+					this.paths.push(new Path(v2.x, v2.y, 1, Math.abs(h), 'gold'));
 				} else {
-					this.paths.push(new Area(v2.x, v2.y, abs(w), 1, 'gold'));
-					this.paths.push(new Area(v1.x, v2.y, 1, abs(h), 'gold'));
+					this.paths.push(new Path(v2.x, v2.y, Math.abs(w), 1, 'gold'));
+					this.paths.push(new Path(v1.x, v2.y, 1, Math.abs(h), 'gold'));
 				}
 			} else if (h > 0) {
 				if (random(1) > 0.5) {
-					this.paths.push(new Area(v2.x, v1.y, abs(w), 1, 'gold'));
-					this.paths.push(new Area(v2.x, v1.y, 1, abs(h), 'gold'));
+					this.paths.push(new Path(v2.x, v1.y, Math.abs(w), 1, 'gold'));
+					this.paths.push(new Path(v2.x, v1.y, 1, Math.abs(h), 'gold'));
 				} else {
-					this.paths.push(new Area(v2.x, v2.y, abs(w), 1, 'gold'));
-					this.paths.push(new Area(v1.x, v1.y, 1, abs(h), 'gold'));
+					this.paths.push(new Path(v2.x, v2.y, Math.abs(w), 1, 'gold'));
+					this.paths.push(new Path(v1.x, v1.y, 1, Math.abs(h), 'gold'));
 				}
 			} else {
-				this.paths.push(new Area(v2.x, v2.y, abs(w), 1, 'gold'));
+				this.paths.push(new Path(v2.x, v2.y, Math.abs(w), 1, 'gold'));
 			}
 		} else if (w > 0) {
 			if (h < 0) {
 				if (random(1) > 0.5) {
-					this.paths.push(new Area(v1.x, v2.y, abs(w), 1, 'gold'));
-					this.paths.push(new Area(v1.x, v2.y, 1, abs(h), 'gold'));
+					this.paths.push(new Path(v1.x, v2.y, Math.abs(w), 1, 'gold'));
+					this.paths.push(new Path(v1.x, v2.y, 1, Math.abs(h), 'gold'));
 				} else {
-					this.paths.push(new Area(v1.x, v1.y, abs(w), 1, 'gold'));
-					this.paths.push(new Area(v2.x, v2.y, 1, abs(h), 'gold'));
+					this.paths.push(new Path(v1.x, v1.y, Math.abs(w), 1, 'gold'));
+					this.paths.push(new Path(v2.x, v2.y, 1, Math.abs(h), 'gold'));
 				}
 			} else if (h > 0) {
 				if (random(1) > 0.5) {
-					this.paths.push(new Area(v1.x, v1.y, abs(w), 1, 'gold'));
-					this.paths.push(new Area(v2.x, v1.y, 1, abs(h), 'gold'));
+					this.paths.push(new Path(v1.x, v1.y, Math.abs(w), 1, 'gold'));
+					this.paths.push(new Path(v2.x, v1.y, 1, Math.abs(h), 'gold'));
 				} else {
-					this.paths.push(new Area(v1.x, v2.y, abs(w), 1, 'gold'));
-					this.paths.push(new Area(v1.x, v1.y, 1, abs(h), 'gold'));
+					this.paths.push(new Path(v1.x, v2.y, Math.abs(w), 1, 'gold'));
+					this.paths.push(new Path(v1.x, v1.y, 1, Math.abs(h), 'gold'));
 				}
 			} else {
-				this.paths.push(new Area(v1.x, v1.y, abs(w), 1, 'gold'));
+				this.paths.push(new Path(v1.x, v1.y, Math.abs(w), 1, 'gold'));
 			}
 		} else {
 			if (h < 0) {
-				this.paths.push(new Area(v2.x, v2.y, 1, abs(h), 'gold'));
+				this.paths.push(new Path(v2.x, v2.y, 1, Math.abs(h), 'gold'));
 			} else {
-				this.paths.push(new Area(v1.x, v1.y, 1, abs(h), 'gold'));
+				this.paths.push(new Path(v1.x, v1.y, 1, Math.abs(h), 'gold'));
 			}
 		}
 	}
@@ -121,6 +161,9 @@ class Node extends Area {
 		if (this.b) this.b.display();
 		for (let i = 0; i < this.paths.length; i++) {	
 			this.paths[i].display();
+		}
+		for (let i = 0; i < this.walls.length; i++) {	
+			this.walls[i].display();
 		}
 	}
 }
