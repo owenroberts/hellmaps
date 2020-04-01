@@ -92,14 +92,17 @@ class Node extends Area {
 	}
 
 	createPath(a, b) {
+		// console.log(a, b);
 
+		// remove +1 and -2 from tut, think its causing missing links
+		// https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268
 		let v1 = {
-			x: Math.round(random(a.x + 1, a.x + a.w - 2)), 
-			y: Math.round(random(a.y + 1, a.y + a.h - 2))
+			x: Math.round(random(a.x, a.x + a.w)), 
+			y: Math.round(random(a.y, a.y + a.h))
 		};
 		let v2 = {
-			x: Math.round(random(b.x + 1, b.x + b.w - 2)),
-			y: Math.round(random(b.y + 1, b.y + b.h - 2))
+			x: Math.round(random(b.x, b.x + b.w)),
+			y: Math.round(random(b.y, b.y + b.h))
 		};
 		
 		let w = v2.x - v1.x;
@@ -108,54 +111,60 @@ class Node extends Area {
 		if (w < 0) {
 			if (h < 0) {
 				if (random(1) > 0.5) {
-					this.paths.push(new Path(v2.x, v1.y, Math.abs(w), 1, 'gold'));
-					this.paths.push(new Path(v2.x, v2.y, 1, Math.abs(h), 'gold'));
+					this.paths.push(new Path(v2.x, v1.y, Math.abs(w) + 1, 1, 'gold'));
+					this.paths.push(new Path(v2.x, v2.y, 1, Math.abs(h) + 1, 'gold'));
 				} else {
-					this.paths.push(new Path(v2.x, v2.y, Math.abs(w), 1, 'gold'));
-					this.paths.push(new Path(v1.x, v2.y, 1, Math.abs(h), 'gold'));
+					this.paths.push(new Path(v2.x, v2.y, Math.abs(w) + 1, 1, 'gold'));
+					this.paths.push(new Path(v1.x, v2.y, 1, Math.abs(h) + 1, 'gold'));
 				}
 			} else if (h > 0) {
 				if (random(1) > 0.5) {
-					this.paths.push(new Path(v2.x, v1.y, Math.abs(w), 1, 'gold'));
-					this.paths.push(new Path(v2.x, v1.y, 1, Math.abs(h), 'gold'));
+					this.paths.push(new Path(v2.x, v1.y, Math.abs(w) + 1, 1, 'gold'));
+					this.paths.push(new Path(v2.x, v1.y, 1, Math.abs(h) + 1, 'gold'));
 				} else {
-					this.paths.push(new Path(v2.x, v2.y, Math.abs(w), 1, 'gold'));
-					this.paths.push(new Path(v1.x, v1.y, 1, Math.abs(h), 'gold'));
+					this.paths.push(new Path(v2.x, v2.y, Math.abs(w) + 1, 1, 'gold'));
+					this.paths.push(new Path(v1.x, v1.y, 1, Math.abs(h) + 1, 'gold')); // 1 short
 				}
 			} else {
-				this.paths.push(new Path(v2.x, v2.y, Math.abs(w), 1, 'gold'));
+				this.paths.push(new Path(v2.x, v2.y, Math.abs(w) + 1, 1, 'gold'));
 			}
 		} else if (w > 0) {
 			if (h < 0) {
 				if (random(1) > 0.5) {
-					this.paths.push(new Path(v1.x, v2.y, Math.abs(w), 1, 'gold'));
-					this.paths.push(new Path(v1.x, v2.y, 1, Math.abs(h), 'gold'));
+					this.paths.push(new Path(v1.x, v2.y, Math.abs(w) + 1, 1, 'gold'));
+					this.paths.push(new Path(v1.x, v2.y, 1, Math.abs(h) + 1, 'gold'));
 				} else {
-					this.paths.push(new Path(v1.x, v1.y, Math.abs(w), 1, 'gold'));
-					this.paths.push(new Path(v2.x, v2.y, 1, Math.abs(h), 'gold'));
+					this.paths.push(new Path(v1.x, v1.y, Math.abs(w) + 1, 1, 'gold'));
+					this.paths.push(new Path(v2.x, v2.y, 1, Math.abs(h) + 1, 'gold'));
 				}
 			} else if (h > 0) {
 				if (random(1) > 0.5) {
-					this.paths.push(new Path(v1.x, v1.y, Math.abs(w), 1, 'gold'));
-					this.paths.push(new Path(v2.x, v1.y, 1, Math.abs(h), 'gold'));
+					this.paths.push(new Path(v1.x, v1.y, Math.abs(w) + 1, 1, 'gold'));
+					this.paths.push(new Path(v2.x, v1.y, 1, Math.abs(h) + 1, 'gold'));
 				} else {
-					this.paths.push(new Path(v1.x, v2.y, Math.abs(w), 1, 'gold'));
-					this.paths.push(new Path(v1.x, v1.y, 1, Math.abs(h), 'gold'));
+					this.paths.push(new Path(v1.x, v2.y, Math.abs(w) + 1, 1, 'gold'));
+					this.paths.push(new Path(v1.x, v1.y, 1, Math.abs(h) + 1, 'gold'));
 				}
 			} else {
-				this.paths.push(new Path(v1.x, v1.y, Math.abs(w), 1, 'gold'));
+				this.paths.push(new Path(v1.x, v1.y, Math.abs(w) + 1, 1, 'gold'));
 			}
 		} else {
 			if (h < 0) {
-				this.paths.push(new Path(v2.x, v2.y, 1, Math.abs(h), 'gold'));
+				this.paths.push(new Path(v2.x, v2.y, 1, Math.abs(h) + 1, 'gold'));
 			} else {
-				this.paths.push(new Path(v1.x, v1.y, 1, Math.abs(h), 'gold'));
+				this.paths.push(new Path(v1.x, v1.y, 1, Math.abs(h) + 1, 'gold'));
 			}
 		}
 	}
 
 	display() {
 		// super.display();
+
+		// textSize(20);
+		// fill('blue')
+		// textAlign(LEFT, TOP);
+		// text(`${this.x},${this.y}`, this.x * cell.w, this.y * cell.h);
+
 		if (this.room) this.room.display();
 		if (this.a) this.a.display();
 		if (this.b) this.b.display();

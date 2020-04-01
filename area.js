@@ -1,5 +1,4 @@
 class Area {
-	
 	constructor(x, y, w, h, c) {
 		this.x = Math.round(x);
 		this.y = Math.round(y);
