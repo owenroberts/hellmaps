@@ -1,6 +1,5 @@
-let cols = 20; // columns
-let rows = 20; // rows
-let min = 5; // min room dimension
+let cols = 30; // columns
+let rows = 30; // rows
 let cell = {}; // room dimension multiplier
 
 let map;
@@ -18,8 +17,12 @@ function setup() {
 function createMap() {
 	background(220);
 
-	map = new Map(cols, rows);
-	map.build({w: 1, h: 1});
+	map = new Map(cols, rows, 8, 14);
+	while (map.nodes.length < 3) {
+		map.build({w: 1, h: 1});
+	}
+	console.log(map.nodes);
+	
 	map.nodes[0].display();
 	// map.walls.forEach(wall => wall.display());
 }
@@ -28,3 +31,4 @@ function mousePressed() {
 	console.clear();
 	createMap();
 }
+

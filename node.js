@@ -6,20 +6,23 @@ class Node extends Area {
 		this.walls = [];
 	}
 
-	split(m) {
+	split(min) {
 		if (this.a || this.b) return false;
 
 		const verticalSplit = Math.random() > this.w / (this.w + this.h);
-		if (m > (verticalSplit ? this.h : this.w)) return false;
+		if (min > (verticalSplit ? this.h : this.w)) return false;
+
+		const max = (verticalSplit ? this.h : this.w) - min;
+		if (max < min) return false;
+
+		const split = Math.floor(random(min, max));
 
 		if (verticalSplit) {
-			const h = Math.floor(this.h * random(0.25, 0.75));
-			this.a = new Node(this.x, this.y, this.w, h);
-			this.b = new Node(this.x, this.y + h, this.w, this.h - h);
+			this.a = new Node(this.x, this.y, this.w, split);
+			this.b = new Node(this.x, this.y + split, this.w, this.h - split);
 		} else {
-			const w = Math.floor(this.w * random(0.25, 0.75));
-			this.a = new Node(this.x, this.y, w, this.h);
-			this.b = new Node(this.x + w, this.y, this.w - w, this.h);
+			this.a = new Node(this.x, this.y, split, this.h);
+			this.b = new Node(this.x + split, this.y, this.w - split, this.h);
 		}
 		return true;
 	}
@@ -30,10 +33,16 @@ class Node extends Area {
 			if (this.b) this.b.createRooms();
 			if (this.a && this.b) this.createPath(this.a.getRoom(), this.b.getRoom());
 		} else {
-			let w = this.w * random(0.25, 0.9);
-			let h = this.h * random(0.25, 0.9);
-			let x = random(0, this.w - w);
-			let y = random(0, this.h - h);
+			// let w = this.w * random(0.25, 0.9);
+			// let h = this.h * random(0.25, 0.9);
+			// let x = random(0, this.w - w);
+			// let y = random(0, this.h - h);
+		
+			const w = Math.floor(random(3, this.w - 2));
+			const h = Math.floor(random(3, this.h - 2));
+			const x = Math.floor(random(1, this.w - w - 1));
+			const y = Math.floor(random(1, this.h - h - 1));
+
 			this.room = new Room(x + this.x, y + this.y, w, h, 'plum');
 		}
 	}
@@ -97,12 +106,12 @@ class Node extends Area {
 		// remove +1 and -2 from tut, think its causing missing links
 		// https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268
 		let v1 = {
-			x: Math.round(random(a.x, a.x + a.w)), 
-			y: Math.round(random(a.y, a.y + a.h))
+			x: Math.floor(random(a.x + 1, a.x + a.w - 2)), 
+			y: Math.floor(random(a.y + 1, a.y + a.h - 2))
 		};
 		let v2 = {
-			x: Math.round(random(b.x, b.x + b.w)),
-			y: Math.round(random(b.y, b.y + b.h))
+			x: Math.floor(random(b.x + 1, b.x + b.w - 2)),
+			y: Math.floor(random(b.y + 1, b.y + b.h - 2))
 		};
 		
 		let w = v2.x - v1.x;
@@ -123,7 +132,7 @@ class Node extends Area {
 					this.paths.push(new Path(v2.x, v1.y, 1, Math.abs(h) + 1, 'gold'));
 				} else {
 					this.paths.push(new Path(v2.x, v2.y, Math.abs(w) + 1, 1, 'gold'));
-					this.paths.push(new Path(v1.x, v1.y, 1, Math.abs(h) + 1, 'gold')); // 1 short
+					this.paths.push(new Path(v1.x, v1.y, 1, Math.abs(h), 'gold')); // 1 short
 				}
 			} else {
 				this.paths.push(new Path(v2.x, v2.y, Math.abs(w) + 1, 1, 'gold'));
@@ -160,10 +169,14 @@ class Node extends Area {
 	display() {
 		// super.display();
 
-		// textSize(20);
-		// fill('blue')
-		// textAlign(LEFT, TOP);
-		// text(`${this.x},${this.y}`, this.x * cell.w, this.y * cell.h);
+		if (p5) {
+
+
+			textSize(14);
+			fill('blue')
+			textAlign(LEFT, TOP);
+			text(`${this.x},${this.y}`, this.x * cell.w, this.y * cell.h);
+		}
 
 		if (this.room) this.room.display();
 		if (this.a) this.a.display();

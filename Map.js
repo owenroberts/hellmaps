@@ -1,13 +1,16 @@
 class Map {
-	constructor(cols, rows) {
+	constructor(cols, rows, minNodeSize, maxNodeSize) {
 		this.cols = cols;
 		this.rows = rows;
+		this.minNodeSize = minNodeSize;
+		this.maxNodeSize = maxNodeSize;
+		this.nodes = [];
 	}
 
-	build(buf) {
+	build(edgeBuffer) {
 		this.walls = [];
 
-		this.nodes = [new Node(buf.w, buf.h, this.cols - buf.w*2, this.rows - buf.h*2)]; 
+		this.nodes.push(new Node(edgeBuffer.w, edgeBuffer.h, this.cols - edgeBuffer.w * 2, this.rows - edgeBuffer.h * 2)); 
 
 		console.group('load map');
 		console.time('nodes');
@@ -16,8 +19,8 @@ class Map {
 			didSplit = false;
 			this.nodes.forEach(node => {
 				if (!node.a && !node.b) {
-					if (node.w > min && node.h > min) {
-						if (node.split(min)) {
+					if (node.w > this.maxNodeSize && node.h > this.maxNodeSize || random(1) > 0.5) {
+						if (node.split(this.minNodeSize)) {
 							this.nodes.push(node.a);
 							this.nodes.push(node.b);
 							didSplit = true;
@@ -52,3 +55,4 @@ class Map {
 		console.groupEnd();
 	}
 }
+
