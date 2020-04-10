@@ -31,4 +31,3 @@ function mousePressed() {
 	console.clear();
 	createMap();
 }
-

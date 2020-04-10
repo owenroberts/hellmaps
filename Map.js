@@ -9,7 +9,6 @@ class Map {
 
 	build(edgeBuffer) {
 		this.walls = [];
-
 		this.nodes.push(new Node(edgeBuffer.w, edgeBuffer.h, this.cols - edgeBuffer.w * 2, this.rows - edgeBuffer.h * 2)); 
 
 		console.group('load map');
@@ -17,7 +16,8 @@ class Map {
 		let didSplit = true;
 		while (didSplit) {
 			didSplit = false;
-			this.nodes.forEach(node => {
+			for (let i = 0; i < this.nodes.length; i++) {
+				const node = this.nodes[i];
 				if (!node.a && !node.b) {
 					if (node.w > this.maxNodeSize && node.h > this.maxNodeSize || random(1) > 0.5) {
 						if (node.split(this.minNodeSize)) {
@@ -27,12 +27,12 @@ class Map {
 						}
 					}
 				}
-			});
+			};
 		}
 		console.timeEnd('nodes');
 
 		console.time('rooms');
-		this.nodes[0].createRooms(cols, rows);
+		this.nodes[0].createRooms();
 		console.timeEnd('rooms');
 
 		console.time('walls');
@@ -51,7 +51,8 @@ class Map {
 			}
 		}
 		console.timeEnd('walls');
-		/* walls takes 1500ms ... needs work */
+		/* walls takes 1500ms ... needs work 
+			wall time got longer after updates ... */
 		console.groupEnd();
 	}
 }

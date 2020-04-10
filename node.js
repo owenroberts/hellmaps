@@ -1,5 +1,4 @@
 class Node extends Area {
-
 	constructor(x, y, w, h) {
 		super(x, y, w, h, Math.floor(random(255)));
 		this.paths = [];
@@ -169,9 +168,7 @@ class Node extends Area {
 	display() {
 		// super.display();
 
-		if (p5) {
-
-
+		if (typeof p5 !== 'undefined') {
 			textSize(14);
 			fill('blue')
 			textAlign(LEFT, TOP);
