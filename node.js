@@ -32,16 +32,10 @@ class Node extends Area {
 			if (this.b) this.b.createRooms();
 			if (this.a && this.b) this.createPath(this.a.getRoom(), this.b.getRoom());
 		} else {
-			// let w = this.w * random(0.25, 0.9);
-			// let h = this.h * random(0.25, 0.9);
-			// let x = random(0, this.w - w);
-			// let y = random(0, this.h - h);
-		
 			const w = Math.floor(random(3, this.w - 2));
 			const h = Math.floor(random(3, this.h - 2));
 			const x = Math.floor(random(1, this.w - w - 1));
 			const y = Math.floor(random(1, this.h - h - 1));
-
 			this.room = new Room(x + this.x, y + this.y, w, h, 'plum');
 		}
 	}
@@ -100,8 +94,6 @@ class Node extends Area {
 	}
 
 	createPath(a, b) {
-		// console.log(a, b);
-
 		// remove +1 and -2 from tut, think its causing missing links
 		// https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268
 		let v1 = {
