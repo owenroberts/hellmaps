@@ -7,19 +7,20 @@ class Map {
 		this.nodes = [];
 	}
 
-	build(edgeBuffer) {
+	build(edgeBuffer, maxNodes) {
 		this.walls = [];
 		this.nodes.push(new Node(edgeBuffer.w, edgeBuffer.h, this.cols - edgeBuffer.w * 2, this.rows - edgeBuffer.h * 2)); 
 
-		console.group('load map');
+		console.groupCollapsed('load map');
 		console.time('nodes');
+
 		let didSplit = true;
-		while (didSplit) {
+		while (didSplit && this.nodes.length < maxNodes) {
 			didSplit = false;
-			for (let i = 0; i < this.nodes.length; i++) {
+			for (let i = 0, len = this.nodes.length; i < len; i++) {
 				const node = this.nodes[i];
-				if (!node.a && !node.b) {
-					if (node.w > this.maxNodeSize && node.h > this.maxNodeSize || random(1) > 0.5) {
+				if (!node.a && !node.b && this.nodes.length < maxNodes - 1) {
+					if (node.w > this.maxNodeSize || node.h > this.maxNodeSize || random(1) > 0.5) {
 						if (node.split(this.minNodeSize)) {
 							this.nodes.push(node.a);
 							this.nodes.push(node.b);

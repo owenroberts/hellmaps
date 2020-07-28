@@ -19,7 +19,7 @@ function createMap() {
 
 	map = new Map(cols, rows, 8, 14);
 	while (map.nodes.length < 3) {
-		map.build({w: 1, h: 1});
+		map.build({w: 1, h: 1}, 15);
 	}
 	console.log(map.nodes);
 	
