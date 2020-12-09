@@ -8,7 +8,7 @@ class Map {
 		this.walls = [];
 	}
 
-	update(cols, rows, minNodeSize, maxNodeSize) {
+	updateSize(cols, rows, minNodeSize, maxNodeSize) {
 		this.cols = cols;
 		this.rows = rows;
 		this.minNodeSize = minNodeSize;
