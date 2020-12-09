@@ -5,6 +5,14 @@ class Map {
 		this.minNodeSize = minNodeSize;
 		this.maxNodeSize = maxNodeSize;
 		this.nodes = [];
+		this.walls = [];
+	}
+
+	update(cols, rows, minNodeSize, maxNodeSize) {
+		this.cols = cols;
+		this.rows = rows;
+		this.minNodeSize = minNodeSize;
+		this.maxNodeSize = maxNodeSize;
 	}
 
 	build(edgeBuffer, maxNodes) {
@@ -48,7 +56,7 @@ class Map {
 						if (this.nodes[i].paths[j].isInside(x, y)) inRoom = true;
 					}
 				}
-				if (!inRoom) this.walls.push(new Wall(x * cell.w, y * cell.h, 'green')); 
+				if (!inRoom) this.walls.push(new Wall(x * cellSize.w, y * cellSize.h, 'green')); 
 			}
 		}
 		console.timeEnd('walls');
