@@ -1,4 +1,4 @@
-class Map {
+class BSPMap {
 	constructor(cols, rows, minNodeSize, maxNodeSize) {
 		this.cols = cols;
 		this.rows = rows;
@@ -28,7 +28,8 @@ class Map {
 			for (let i = 0, len = this.nodes.length; i < len; i++) {
 				const node = this.nodes[i];
 				if (!node.a && !node.b && this.nodes.length < maxNodes - 1) {
-					if (node.w > this.maxNodeSize || node.h > this.maxNodeSize || random(1) > 0.5) {
+					// can i have randomness here ??? 
+					if (node.w > this.maxNodeSize || node.h > this.maxNodeSize /* || random(1) > 0.5*/ ) {
 						if (node.split(this.minNodeSize)) {
 							this.nodes.push(node.a);
 							this.nodes.push(node.b);
@@ -36,7 +37,7 @@ class Map {
 						}
 					}
 				}
-			};
+			}
 		}
 		console.timeEnd('nodes');
 

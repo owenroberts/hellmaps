@@ -1,6 +1,5 @@
-let cols = 30; // columns
-let rows = 30; // rows
-let cell = {}; // room dimension multiplier
+let mapSize = 30;
+let cellSize = {}; // room dimension multiplier
 
 let map;
 
@@ -9,17 +8,17 @@ function setup() {
 	createCanvas(sz, sz);
 	noStroke();
 
-	cell.w = width / cols;
-	cell.h = height / rows;
+	cellSize.w = width / mapSize;
+	cellSize.h = height / mapSize;
 	createMap();
 }
 
 function createMap() {
 	background(220);
 
-	map = new Map(cols, rows, 8, 14);
+	map = new BSPMap(mapSize, mapSize, mapSize / 4, mapSize / 2 - 1);
 	while (map.nodes.length < 3) {
-		map.build({w: 1, h: 1}, 15);
+		map.build({w: 1, h: 1}, mapSize / 2);
 	}
 	console.log(map.nodes);
 	

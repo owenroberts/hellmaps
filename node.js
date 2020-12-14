@@ -8,11 +8,12 @@ class Node extends Area {
 	split(min) {
 		if (this.a || this.b) return false;
 
+		// random chance of vertical split weighted based on size 
 		const verticalSplit = Math.random() > this.w / (this.w + this.h);
 		if (min > (verticalSplit ? this.h : this.w)) return false;
 
 		const max = (verticalSplit ? this.h : this.w) - min;
-		if (max < min) return false;
+		if (min > max) return false;
 
 		const split = Math.floor(random(min, max));
 
@@ -164,7 +165,7 @@ class Node extends Area {
 			textSize(14);
 			fill('blue')
 			textAlign(LEFT, TOP);
-			text(`${this.x},${this.y}`, this.x * cell.w, this.y * cell.h);
+			text(`${this.x},${this.y}`, this.x * cellSize.w, this.y * cellSize.h);
 		}
 
 		if (this.room) this.room.display();
