@@ -15,9 +15,10 @@ class BSPMap {
 		this.maxNodeSize = maxNodeSize;
 	}
 
-	build(edgeBuffer, maxNodes) {
+	build(buffer, maxNodes) {
 		this.walls = [];
-		this.nodes.push(new Node(edgeBuffer.w, edgeBuffer.h, this.cols - edgeBuffer.w * 2, this.rows - edgeBuffer.h * 2)); 
+		this.nodes = [];
+		this.nodes.push(new Node(buffer.w, buffer.h, this.cols - buffer.w * 2, this.rows - buffer.h * 2)); 
 
 		console.groupCollapsed('load map');
 		console.time('nodes');
