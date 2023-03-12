@@ -20,7 +20,21 @@ class BSPMap {
 		this.maxNodeSize = maxNodeSize;
 	}
 
-	build(buffer, maxNodes, textures) {
+	getMatrixCell(x, y, type) {
+		return [
+			this.matrix[x - 1 + (y - 1) * this.cols] === type ? 1 : 0, // -1, -1
+			this.matrix[x + (y - 1) * this.cols] === type ? 1 : 0, // 0, -1,
+			this.matrix[x + 1 + (y - 1) * this.cols] === type ? 1 : 0, // 0, -1,
+			this.matrix[x - 1 + y * this.cols] === type ? 1 : 0, // -1, 0,
+			// 0, 0
+			this.matrix[x + 1 + y * this.cols] === type ? 1 : 0, // 1, 0,
+			this.matrix[x - 1 + (y + 1) * this.cols] === type ? 1 : 0, // -1, 1,
+			this.matrix[x + (y + 1) * this.cols] === type ? 1 : 0, // 0, 1
+			this.matrix[x + 1 + (y + 1) * this.cols] === type ? 1 : 0, // 1, 1
+		].join('').toString();
+	}
+
+	build(buffer, maxNodes, usePaths=true) {
 		this.walls = [];
 		this.nodes = [];
 		this.nodes.push(new Node(buffer.w, buffer.h, this.cols - buffer.w * 2, this.rows - buffer.h * 2)); 
@@ -48,7 +62,7 @@ class BSPMap {
 		console.timeEnd('nodes');
 
 		console.time('rooms');
-		this.nodes[0].createRooms();
+		this.nodes[0].createRooms(usePaths);
 		console.timeEnd('rooms');
 
 		console.time('walls');
@@ -66,24 +80,30 @@ class BSPMap {
 						if (this.nodes[i].paths[j].isInside(x, y)) inPath = true;
 					}
 				}
-				this.matrix[x + y * this.rows] = 0;
-				if (inRoom) this.matrix[x + y * this.rows] = 1;
-				if (inPath) this.matrix[x + y * this.rows] = 2;
-				if (inRoom && inPath) this.matrix[x + y * this.rows] = 3;
+				// console.log(x, y, x + y * this.rows, y + x * this.cols);
+				this.matrix[x + y * this.cols] = 0;
+				if (inRoom) this.matrix[x + y * this.cols] = 1;
+				if (inPath) this.matrix[x + y * this.cols] = 2;
+				if (inRoom && inPath) this.matrix[x + y * this.cols] = 3;
 			}
 		}
 
-		for (let i = 0; i < this.matrix.length; i++) {
-			if (this.matrix[i] === 0) {
-				const x = i % this.cols;
-				const y = Math.floor(i / this.cols);
-				this.walls.push(new Wall({
-					x: x * cellSize.w, 
-					y: y * cellSize.h, 
-					texture: textures.walls,
-				})); 
-			}
-		}
+		// matrix 0 = wall, 1 room, 2 path, 3 room + path
+
+		// console.log(this.matrix);
+
+		// for (let i = 0; i < this.matrix.length; i++) {
+		// 	if (this.matrix[i] === 0) {
+		// 		const x = i % this.cols;
+		// 		const y = Math.floor(i / this.cols);
+				
+		// 		this.walls.push(new Wall({
+		// 			x: x * cellSize.w, 
+		// 			y: y * cellSize.h, 
+		// 			// texture: textures.room,
+		// 		})); 
+		// 	}
+		// }
 
 		console.timeEnd('walls');
 		/* walls takes 1500ms ... needs work 

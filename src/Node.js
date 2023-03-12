@@ -27,11 +27,11 @@ class Node extends Area {
 		return true;
 	}
 
-	createRooms() {
+	createRooms(usePaths=true) {
 		if (this.a || this.b) {
-			if (this.a) this.a.createRooms();
-			if (this.b) this.b.createRooms();
-			if (this.a && this.b) this.createPath(this.a.getRoom(), this.b.getRoom());
+			if (this.a) this.a.createRooms(usePaths);
+			if (this.b) this.b.createRooms(usePaths);
+			if (this.a && this.b && usePaths) this.createPath(this.a.getRoom(), this.b.getRoom());
 		} else {
 			const w = Math.floor(random(3, this.w - 2));
 			const h = Math.floor(random(3, this.h - 2));
