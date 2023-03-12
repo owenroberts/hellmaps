@@ -1,3 +1,8 @@
+/*
+	map uses Map, Area, Node classes
+	game provides Path, Room, Wall
+*/
+
 class BSPMap {
 	constructor(cols, rows, minNodeSize, maxNodeSize) {
 		this.cols = cols;
@@ -15,7 +20,7 @@ class BSPMap {
 		this.maxNodeSize = maxNodeSize;
 	}
 
-	build(buffer, maxNodes) {
+	build(buffer, maxNodes, textures) {
 		this.walls = [];
 		this.nodes = [];
 		this.nodes.push(new Node(buffer.w, buffer.h, this.cols - buffer.w * 2, this.rows - buffer.h * 2)); 
@@ -47,20 +52,39 @@ class BSPMap {
 		console.timeEnd('rooms');
 
 		console.time('walls');
+		this.matrix = [];
+
 		for (let x = 0; x < this.cols; x++) {
 			for (let y = 0; y < this.rows; y++) {
 				let inRoom = false;
+				let inPath = false;
 				for (let i = 0; i < this.nodes.length; i++) {
 					if (this.nodes[i].room) {
 						if (this.nodes[i].room.isInside(x,y)) inRoom = true;
 					}
 					for (let j = 0; j < this.nodes[i].paths.length; j++) {
-						if (this.nodes[i].paths[j].isInside(x, y)) inRoom = true;
+						if (this.nodes[i].paths[j].isInside(x, y)) inPath = true;
 					}
 				}
-				if (!inRoom) this.walls.push(new Wall(x * cellSize.w, y * cellSize.h, 'green')); 
+				this.matrix[x + y * this.rows] = 0;
+				if (inRoom) this.matrix[x + y * this.rows] = 1;
+				if (inPath) this.matrix[x + y * this.rows] = 2;
+				if (inRoom && inPath) this.matrix[x + y * this.rows] = 3;
 			}
 		}
+
+		for (let i = 0; i < this.matrix.length; i++) {
+			if (this.matrix[i] === 0) {
+				const x = i % this.cols;
+				const y = Math.floor(i / this.cols);
+				this.walls.push(new Wall({
+					x: x * cellSize.w, 
+					y: y * cellSize.h, 
+					texture: textures.walls,
+				})); 
+			}
+		}
+
 		console.timeEnd('walls');
 		/* walls takes 1500ms ... needs work 
 			wall time got longer after updates ... */
