@@ -4,7 +4,6 @@ class Area {
 		this.y = Math.round(y);
 		this.w = Math.max(Math.round(w), 1);
 		this.h = Math.max(Math.round(h), 1);
-		this.c = c;
 	}
 
 	isInside(x, y) {

@@ -4,13 +4,16 @@
 */
 
 class BSPMap {
-	constructor(cols, rows, minNodeSize, maxNodeSize) {
+	constructor(cols, rows, minNodeSize, maxNodeSize, minRoomSize) {
 		this.cols = cols;
 		this.rows = rows;
 		this.minNodeSize = minNodeSize;
 		this.maxNodeSize = maxNodeSize;
+		this.minRoomSize = minRoomSize ?? 3;
 		this.nodes = [];
 		this.walls = [];
+		this.rooms = [];
+		this.paths = [];
 	}
 
 	updateSize(cols, rows, minNodeSize, maxNodeSize) {
@@ -20,26 +23,34 @@ class BSPMap {
 		this.maxNodeSize = maxNodeSize;
 	}
 
-	getMatrixCell(x, y, type) {
+	getMatrixCellNum(x, y, includeEdges=false) {
+		if (x < 0 || y < 0 || x >= this.cols || y >= this.rows) {
+			return -1;
+		} else {
+			return this.matrix[x + y * this.cols];
+		}
+	}
+
+	getMatrixCell(x, y, types, includeEdges=false) {
 		return [
-			this.matrix[x - 1 + (y - 1) * this.cols] === type ? 1 : 0, // -1, -1
-			this.matrix[x + (y - 1) * this.cols] === type ? 1 : 0, // 0, -1,
-			this.matrix[x + 1 + (y - 1) * this.cols] === type ? 1 : 0, // 0, -1,
-			this.matrix[x - 1 + y * this.cols] === type ? 1 : 0, // -1, 0,
-			// 0, 0
-			this.matrix[x + 1 + y * this.cols] === type ? 1 : 0, // 1, 0,
-			this.matrix[x - 1 + (y + 1) * this.cols] === type ? 1 : 0, // -1, 1,
-			this.matrix[x + (y + 1) * this.cols] === type ? 1 : 0, // 0, 1
-			this.matrix[x + 1 + (y + 1) * this.cols] === type ? 1 : 0, // 1, 1
+			types.includes(this.getMatrixCellNum(x - 1, y - 1)) ? 1 : 0,
+			types.includes(this.getMatrixCellNum(x    , y - 1)) ? 1 : 0,
+			types.includes(this.getMatrixCellNum(x + 1, y - 1)) ? 1 : 0,
+			types.includes(this.getMatrixCellNum(x - 1, y    )) ? 1 : 0,
+			types.includes(this.getMatrixCellNum(x + 1, y    )) ? 1 : 0,
+			types.includes(this.getMatrixCellNum(x - 1, y + 1)) ? 1 : 0,
+			types.includes(this.getMatrixCellNum(x    , y + 1)) ? 1 : 0,
+			types.includes(this.getMatrixCellNum(x + 1, y + 1)) ? 1 : 0,
 		].join('').toString();
 	}
 
-	build(buffer, maxNodes, usePaths=true) {
+	build(buffer, roomBuffer, maxNodes, usePaths=true) {
 		this.walls = [];
 		this.nodes = [];
-		this.nodes.push(new Node(buffer.w, buffer.h, this.cols - buffer.w * 2, this.rows - buffer.h * 2)); 
-
-		console.groupCollapsed('load map');
+		const start = new Node(buffer.w, buffer.h, this.cols - buffer.w * 2, this.rows - buffer.h * 2);
+		this.nodes.push(start); 
+		// console.groupCollapsed('load map');
+		console.group('load map');
 		console.time('nodes');
 
 		let didSplit = true;
@@ -62,7 +73,16 @@ class BSPMap {
 		console.timeEnd('nodes');
 
 		console.time('rooms');
-		this.nodes[0].createRooms(usePaths);
+		start.createRooms(this.minRoomSize, roomBuffer, usePaths);
+		this.rooms = start.getRooms();
+
+		function getPaths(node, array) {
+			if (node.paths) node.paths.forEach(p => array.push(p));
+			if (node.a) getPaths(node.a, array);
+			if (node.b) getPaths(node.b, array);
+		}
+		getPaths(start, this.paths);
+
 		console.timeEnd('rooms');
 
 		console.time('walls');
