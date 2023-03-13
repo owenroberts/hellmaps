@@ -110,24 +110,15 @@ class BSPMap {
 
 		// matrix 0 = wall, 1 room, 2 path, 3 room + path
 
-		// console.log(this.matrix);
-
-		// for (let i = 0; i < this.matrix.length; i++) {
-		// 	if (this.matrix[i] === 0) {
-		// 		const x = i % this.cols;
-		// 		const y = Math.floor(i / this.cols);
-				
-		// 		this.walls.push(new Wall({
-		// 			x: x * cellSize.w, 
-		// 			y: y * cellSize.h, 
-		// 			// texture: textures.room,
-		// 		})); 
-		// 	}
-		// }
-
 		console.timeEnd('walls');
-		/* walls takes 1500ms ... needs work 
-			wall time got longer after updates ... */
+		for (let i = 0; i < this.matrix.length; i++) {
+			if (this.matrix[i] === 0) {
+				const x = i % this.cols;
+				const y = Math.floor(i / this.cols);
+				this.walls.push(new Area(x * cellSize.w, y * cellSize.h, 1, 1)); 
+			}
+		}
+
 		console.groupEnd();
 	}
 }
