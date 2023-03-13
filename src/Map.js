@@ -31,16 +31,39 @@ class BSPMap {
 		}
 	}
 
-	getMatrixCell(x, y, types, includeEdges=false) {
+	getWangBlobNum(binaryString) {
+		let array = binaryString.split('').map(n => Boolean(+n));
+		let [t, tr, r, br, b, bl, l, tl] = array;
+		if (!(t && l)) tl = 0;
+		if (!(t && r)) tr = 0;
+		if (!(b && l)) bl = 0;
+		if (!(b && r)) br = 0;
+
+		let tot = 0;
+		if (t) 	tot += (1 << 0);
+		if (tr)	tot += (1 << 1);
+		if (r)	tot += (1 << 2);
+		if (br)	tot += (1 << 3);
+		if (b) 	tot += (1 << 4);
+		if (bl)	tot += (1 << 5);
+		if (l)	tot += (1 << 6);
+		if (tl)	tot += (1 << 7);
+
+		return tot;
+	}
+
+	getMatrixCell(x, y, types) {
+		// north, north-east, east, south-east, south, south-west, west, nort-west
+		// types 0 wall, 1 room, 2 path, 3 room + path, -1 edge
 		return [
-			types.includes(this.getMatrixCellNum(x - 1, y - 1)) ? 1 : 0,
 			types.includes(this.getMatrixCellNum(x    , y - 1)) ? 1 : 0,
 			types.includes(this.getMatrixCellNum(x + 1, y - 1)) ? 1 : 0,
-			types.includes(this.getMatrixCellNum(x - 1, y    )) ? 1 : 0,
 			types.includes(this.getMatrixCellNum(x + 1, y    )) ? 1 : 0,
-			types.includes(this.getMatrixCellNum(x - 1, y + 1)) ? 1 : 0,
-			types.includes(this.getMatrixCellNum(x    , y + 1)) ? 1 : 0,
 			types.includes(this.getMatrixCellNum(x + 1, y + 1)) ? 1 : 0,
+			types.includes(this.getMatrixCellNum(x    , y + 1)) ? 1 : 0,
+			types.includes(this.getMatrixCellNum(x - 1, y + 1)) ? 1 : 0,
+			types.includes(this.getMatrixCellNum(x - 1, y    )) ? 1 : 0,
+			types.includes(this.getMatrixCellNum(x - 1, y - 1)) ? 1 : 0,
 		].join('').toString();
 	}
 

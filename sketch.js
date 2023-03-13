@@ -4,7 +4,7 @@
 	https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268
 */
 
-let mapSize = { w: 20, h: 20 };
+let mapSize = { w: 30, h: 30 };
 let cellSize = {}; // room dimension multiplier
 let map;
 
@@ -14,6 +14,21 @@ function setup() {
 	noStroke();
 	cellSize.w = width / mapSize.w;
 	cellSize.h = height / mapSize.h;
+	newMap();
+
+	// createButton('Refresh Map')
+	// 	.parent('ui')
+	// 	.pressed(newMap);
+
+	// createSlider();
+}
+
+function mousePressed() {
+	console.clear();
+	newMap();
+}
+
+function newMap() {
 	createMap();
 	drawMap();
 }
@@ -21,9 +36,9 @@ function setup() {
 function createMap() {
 	background(220);
 
-	map = new BSPMap(mapSize.w, mapSize.h, 2, 6, 2);
+	map = new BSPMap(mapSize.w, mapSize.h, 1, 6, 1);
 	// while (map.nodes.length < 3) {
-	map.build({ w: 0, h: 0 }, { w: 0, h: 0 }, 16);
+	map.build({ w: 0, h: 0 }, { w: 0, h: 0 }, 16, false);
 	// }
 	console.log('map', map);
 }
@@ -70,8 +85,3 @@ function drawMap() {
 	}
 }
 
-function mousePressed() {
-	console.clear();
-	createMap();
-	drawMap();
-}
