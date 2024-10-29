@@ -73,8 +73,8 @@ class BSPMap {
 		const start = new Node(buffer.w, buffer.h, this.cols - buffer.w * 2, this.rows - buffer.h * 2);
 		this.nodes.push(start); 
 		// console.groupCollapsed('load map');
-		console.group('load map');
-		console.time('nodes');
+		// console.group('load map');
+		// console.time('nodes');
 
 		let didSplit = true;
 		while (didSplit && this.nodes.length < maxNodes) {
@@ -93,9 +93,9 @@ class BSPMap {
 				}
 			}
 		}
-		console.timeEnd('nodes');
+		// console.timeEnd('nodes');
 
-		console.time('rooms');
+		// console.time('rooms');
 		start.createRooms(this.minRoomSize, roomBuffer, usePaths);
 		this.rooms = start.getRooms();
 
@@ -106,9 +106,9 @@ class BSPMap {
 		}
 		getPaths(start, this.paths);
 
-		console.timeEnd('rooms');
+		// console.timeEnd('rooms');
 
-		console.time('walls');
+		// console.time('walls');
 		this.matrix = [];
 
 		for (let x = 0; x < this.cols; x++) {
@@ -133,7 +133,7 @@ class BSPMap {
 
 		// matrix 0 = wall, 1 room, 2 path, 3 room + path
 
-		console.timeEnd('walls');
+		// console.timeEnd('walls');
 		for (let i = 0; i < this.matrix.length; i++) {
 			if (this.matrix[i] === 0) {
 				const x = i % this.cols;
@@ -142,7 +142,7 @@ class BSPMap {
 			}
 		}
 
-		console.groupEnd();
+		// console.groupEnd();
 	}
 }
 
