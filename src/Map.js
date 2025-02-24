@@ -2,8 +2,10 @@
 	map uses Map, Area, Node classes
 	game provides Path, Room, Wall
 */
+import { Node } from './Node.js';
+import { Area } from './Area.js';
 
-class BSPMap {
+export class BSPMap {
 	constructor(cols, rows, minNodeSize, maxNodeSize, minRoomSize) {
 		this.cols = cols;
 		this.rows = rows;
@@ -67,7 +69,7 @@ class BSPMap {
 		].join('').toString();
 	}
 
-	build(buffer, roomBuffer, maxNodes, usePaths=true) {
+	build(buffer, roomBuffer, maxNodes, cellSize, usePaths=true) {
 		this.walls = [];
 		this.nodes = [];
 		const start = new Node(buffer.w, buffer.h, this.cols - buffer.w * 2, this.rows - buffer.h * 2);

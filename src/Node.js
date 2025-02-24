@@ -1,4 +1,7 @@
-class Node extends Area {
+import * as Cool from '../../cool/cool.js';
+import { Area } from './Area.js';
+
+export class Node extends Area {
 	constructor(x, y, w, h) {
 		super(x, y, w, h);
 		this.paths = [];
@@ -15,7 +18,7 @@ class Node extends Area {
 		const max = (verticalSplit ? this.h : this.w) - min;
 		if (min > max) return false;
 
-		const split = Math.floor(random(min, max));
+		const split = Math.floor(Cool.random(min, max));
 
 		if (verticalSplit) {
 			this.a = new Node(this.x, this.y, this.w, split);
@@ -33,10 +36,10 @@ class Node extends Area {
 			if (this.b) this.b.createRooms(minRoomSize, roomBuffer, usePaths);
 			if (this.a && this.b && usePaths) this.createPath(this.a.getRoom(), this.b.getRoom());
 		} else {
-			const w = Math.floor(random(minRoomSize, this.w - roomBuffer.w * 2));
-			const h = Math.floor(random(minRoomSize, this.h - roomBuffer.h * 2));
-			const x = Math.floor(random(roomBuffer.w, this.w - w - roomBuffer.w));
-			const y = Math.floor(random(roomBuffer.h, this.h - h - roomBuffer.h));
+			const w = Math.floor(Cool.random(minRoomSize, this.w - roomBuffer.w * 2));
+			const h = Math.floor(Cool.random(minRoomSize, this.h - roomBuffer.h * 2));
+			const x = Math.floor(Cool.random(roomBuffer.w, this.w - w - roomBuffer.w));
+			const y = Math.floor(Cool.random(roomBuffer.h, this.h - h - roomBuffer.h));
 			this.room = new Area(x + this.x, y + this.y, w, h);
 		}
 	}
@@ -91,7 +94,7 @@ class Node extends Area {
 			if (!a && !b) return null;
 			else if (!b) return a;
 			else if (!a) return b;
-			else return random(1) > 0.5 ? a : b;
+			else return Cool.random(1) > 0.5 ? a : b;
 		}
 	}
 
@@ -99,12 +102,12 @@ class Node extends Area {
 		// remove +1 and -2 from tut, think its causing missing links
 		// https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268
 		let v1 = {
-			x: Math.floor(random(a.x + 1, a.x + a.w - 2)), 
-			y: Math.floor(random(a.y + 1, a.y + a.h - 2))
+			x: Math.floor(Cool.random(a.x + 1, a.x + a.w - 2)), 
+			y: Math.floor(Cool.random(a.y + 1, a.y + a.h - 2))
 		};
 		let v2 = {
-			x: Math.floor(random(b.x + 1, b.x + b.w - 2)),
-			y: Math.floor(random(b.y + 1, b.y + b.h - 2))
+			x: Math.floor(Cool.random(b.x + 1, b.x + b.w - 2)),
+			y: Math.floor(Cool.random(b.y + 1, b.y + b.h - 2))
 		};
 		
 		let w = v2.x - v1.x;
