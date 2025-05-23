@@ -5,10 +5,30 @@
 	<meta charset="utf-8">
 </head>
 <body>
-	<div id="ui"></div>
-	<script src="./lib/p5.min.js"></script>
-	<script src="./src/Area.js"></script>
-	<script src="./src/Node.js"></script>
-	<script src="./src/Map.js"></script>
-	<script src="sketch.js"></script>
-</body></html>
+	<canvas id="canvas"></canvas>
+	<div id="ui">
+		
+		<label for="cell-width">Cell width</label>
+		<input id="cell-width" type="number" min="4" max="128" value="16">
+		<br>
+		<label for="cell-height">Cell height</label>
+		<input id="cell-height" type="number" min="4" max="128" value="16">
+		<br>
+		<label for="map-cols">Map columns</label>
+		<input id="map-cols" type="number" min="2" max="32" value="32">
+		<br>
+		<label for="map-rows">Map rows</label>
+		<input id="map-rows" type="number" min="2" max="32" value="32">
+		<br>
+		<label for="max-nodes">Max nodes</label>
+		<input id="max-nodes" type="number" min="1" max="32" value="16">
+		<br>
+		<label for="use-paths">Use paths</label>
+		<input id="use-paths" type="checkbox" checked>
+		<br>
+
+		<button id="new-map">generate</button>
+	</div>
+	<script src="src/index.js" type="module"></script>	
+</body>
+</html>
