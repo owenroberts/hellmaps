@@ -1,6 +1,9 @@
 import { random, coinFlip } from '../../cool/cool.js';
 import { Area } from './Area.js';
 
+/**
+ * class for map node
+ */
 export class Node extends Area {
 	constructor(x, y, w, h) {
 		super(x, y, w, h);

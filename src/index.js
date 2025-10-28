@@ -10,7 +10,6 @@ let mapBuffer = { w: 0, h: 0 };
 let roomBuffer = { w: 0, h: 0 };
 let maxNodes = 16;
 let usePaths = true;
-let map;
 
 let width = cellSize.w * mapSize.w;
 let height = cellSize.h * mapSize.h;
@@ -24,22 +23,16 @@ function newMap() {
 	canvas.width = width;
 	canvas.height = height;
 
-	createMap();
-	drawMap();
-}
-
-function createMap() {
-	map = new BSPMap(mapSize.w, mapSize.h, 1, 6, 1);
+	const map = new BSPMap(mapSize.w, mapSize.h, 3, 6, 2);
 	map.build(mapBuffer, roomBuffer, maxNodes, cellSize, usePaths);
 	console.log({map});
-}
 
-function drawMap() {
-	ctx.clearRect(0, 0, width, height);
+	ctx.fillStyle = `lightblue`;
+	ctx.fillRect(0, 0, width, height);
 
 	for (let i = 0; i < map.nodes.length; i++) {
 		const c = Math.round(random(100, 200));
-		ctx.fillStyle = `rgb(${c}, ${c}, ${c})`;
+		ctx.fillStyle = `rgb(${random(50, 150)}, ${random(100, 200)}, ${random(100, 200)})`;
 
 		const n = map.nodes[i];
 		ctx.fillRect(n.x * cellSize.w, n.y * cellSize.h, n.w * cellSize.w, n.h * cellSize.h);
@@ -71,7 +64,7 @@ function drawMap() {
 		for (let y = 0; y <= mapSize.h; y++) {
 			ctx.fillStyle = "rgba(0, 200, 200, 200)"; //(0, 200, 100, 200);
 			ctx.beginPath();
-			ctx.arc(x * cellSize.w, y * cellSize.h, 2, 0, Math.PI * 2);
+			ctx.arc(x * cellSize.w, y * cellSize.h, 1, 0, Math.PI * 2);
 			ctx.fill();
 		}
 	}
@@ -83,27 +76,47 @@ newMap();
 document.getElementById('new-map').addEventListener('click', newMap);
 
 document.getElementById('cell-width').addEventListener('input', ev => {
-	cellSize.w = ev.target.value;
+	cellSize.w = +ev.target.value;
 	newMap();
 });
 
 document.getElementById('cell-height').addEventListener('input', ev => {
-	cellSize.h = ev.target.value;
+	cellSize.h = +ev.target.value;
 	newMap();
 });
 
 document.getElementById('map-cols').addEventListener('input', ev => {
-	mapSize.w = ev.target.value;
+	mapSize.w = +ev.target.value;
 	newMap();
 });
 
 document.getElementById('map-rows').addEventListener('input', ev => {
-	mapSize.h = ev.target.value;
+	mapSize.h = +ev.target.value;
+	newMap();
+});
+
+document.getElementById('map-buffer-cols').addEventListener('input', ev => {
+	mapBuffer.w = +ev.target.value;
+	newMap();
+});
+
+document.getElementById('room-buffer-rows').addEventListener('input', ev => {
+	roomBuffer.h = +ev.target.value;
+	newMap();
+});
+
+document.getElementById('room-buffer-cols').addEventListener('input', ev => {
+	roomBuffer.w = +ev.target.value;
+	newMap();
+});
+
+document.getElementById('map-buffer-rows').addEventListener('input', ev => {
+	mapBuffer.h = +ev.target.value;
 	newMap();
 });
 
 document.getElementById('max-nodes').addEventListener('input', ev => {
-	maxNodes = ev.target.value;
+	maxNodes = +ev.target.value;
 	newMap();
 });
 

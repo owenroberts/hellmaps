@@ -1,10 +1,10 @@
-/*
-	map uses Map, Area, Node classes
-	game provides Path, Room, Wall
-*/
 import { Node } from './Node.js';
 import { Area } from './Area.js';
 
+/**
+ * class for BSPMap
+ * Node and Area classes
+ */
 export class BSPMap {
 	constructor(cols, rows, minNodeSize, maxNodeSize, minRoomSize) {
 		this.cols = cols;
@@ -101,6 +101,7 @@ export class BSPMap {
 		start.createRooms(this.minRoomSize, roomBuffer, usePaths);
 		this.rooms = start.getRooms();
 
+		// just adds paths to an array
 		function getPaths(node, array) {
 			if (node.paths) node.paths.forEach(p => array.push(p));
 			if (node.a) getPaths(node.a, array);

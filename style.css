@@ -1,10 +1,10 @@
 html, body {
-  margin: 0;
-  padding: 0;
+/*  height: 100%;*/
 }
 
 body {
   display: flex;
+  justify-content: center;
 }
 
 #ui { 
@@ -13,4 +13,5 @@ body {
 
 canvas {
   display: block;
+  padding: 8px;
 }
